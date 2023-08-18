@@ -1,0 +1,87 @@
+server {
+        listen 6875;
+        listen 443;
+        ssl on;
+        ssl_certificate /etc/ssl/localhost.crt;
+        ssl_certificate_key /etc/ssl/localhost.key;
+
+        root /var/www/BookStack/public;
+
+        index index.php index.html;
+
+        server_name 192.168.222.171;
+
+        location / {
+                try_files $uri $uri/ =404;
+        }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+
+<!--
+server {
+  listen 80;
+  listen [::]:80;
+
+  server_name docs.kimboeckx.localhost;
+
+  root /var/www/bookstack/public;
+  index index.php index.html;
+
+  location / {
+    try_files $uri $uri/ /index.php?$query_string;
+  }
+  
+  location ~ \.php$ {
+    include snippets/fastcgi-php.conf;
+    fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+  }
+}
+-->
+<!-- 
+<VirtualHost *:80>
+  ServerName docs.kimboeckx.localhost
+
+  ServerAdmin webmaster@localhost
+  DocumentRoot /var/www/bookstack/public/index.php
+
+  <Directory /var/www/bookstack/public/>
+      Options -Indexes +FollowSymLinks
+      AllowOverride None
+      Require all granted
+      <IfModule mod_rewrite.c>
+          <IfModule mod_negotiation.c>
+              Options -MultiViews -Indexes
+          </IfModule>
+
+          RewriteEngine On
+
+         # Handle Authorization Header
+          RewriteCond %{HTTP:Authorization} .
+          RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+          # Redirect Trailing Slashes If Not A Folder...
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_URI} (.+)/$
+          RewriteRule ^ %1 [L,R=301]
+
+          # Handle Front Controller...
+          RewriteCond %{REQUEST_FILENAME} !-d
+          RewriteCond %{REQUEST_FILENAME} !-f
+          RewriteRule ^ index.php [L]
+      </IfModule>
+  </Directory>
+
+ # ErrorLog ${APACHE_LOG_DIR}/error.log
+ # CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+</VirtualHost>
+-->
